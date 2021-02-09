@@ -4,6 +4,12 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
          
+  after_create :send_welcome_mail
+ 
+  def send_welcome_mail
+    NotificationMailer.send_complete_mail(self).deliver
+  end
+  
 	has_many :books
   attachment :profile_image, destroy: false
 
